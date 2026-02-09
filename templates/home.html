@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<h2>Add Employee</h2>
+
+<form method="POST" action="/add" enctype="multipart/form-data">
+    Name: <input type="text" name="name" required><br><br>
+    Email: <input type="email" name="email" required><br><br>
+    Department:
+<select name="department" required>
+    <option value="HR">HR</option>
+    <option value="IT">IT</option>
+    <option value="Sales">Sales</option>
+    <option value="Finance">Finance</option>
+</select>
+<br><br>
+
+    Salary: <input type="number" name="salary" required><br><br>
+    Photo:
+<input type="file" name="photo" required>
+<br><br>
+
+
+    <button type="submit">Add Employee</button>
+</form>
+
+<br>
+<a href="/view">View Employees</a>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+<h2>Edit Employee</h2>
+
+<form method="POST" action="/update/{{ emp[0] }}">
+    Name: <input type="text" name="name" value="{{ emp[1] }}" required><br><br>
+    Email: <input type="email" name="email" value="{{ emp[2] }}" required><br><br>
+    Department:
+<select name="department">
+    <option value="HR" {% if emp[3]=="HR" %}selected{% endif %}>HR</option>
+    <option value="IT" {% if emp[3]=="IT" %}selected{% endif %}>IT</option>
+    <option value="Sales" {% if emp[3]=="Sales" %}selected{% endif %}>Sales</option>
+    <option value="Finance" {% if emp[3]=="Finance" %}selected{% endif %}>Finance</option>
+</select>
+<br><br>
+
+    Salary: <input type="number" name="salary" value="{{ emp[4] }}" reruired><br><br>
+
+    <button type="submit">Update</button>
+</form>
+
+<br>
+<a href="/view">Back</a>
+
+</body>
+</html>

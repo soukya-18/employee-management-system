@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>My Profile</h2>
+
+{% if emp %}
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Name</th>
+        <td>{{ emp[1] }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ emp[2] }}</td>
+    </tr>
+    <tr>
+        <th>Department</th>
+        <td>{{ emp[3] }}</td>
+    </tr>
+    <tr>
+        <th>Salary</th>
+        <td>{{ emp[4] }}</td>
+    </tr>
+</table>
+{% else %}
+<p>No profile found.</p>
+{% endif %}
+
+<br>
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+</html>
