@@ -7,22 +7,14 @@ matplotlib.use("Agg")
 from openpyxl import Workbook
 from flask import send_file
 from flask import Flask, request,render_template,redirect,session,url_for
-import mysql.connector
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
 
+# TEMP: database disabled for deployment
+db = None
+
 app.secret_key = "secret123"
-
-
-# ---------------- DATABASE CONNECTION ----------------
-db = mysql.connector.connect(
-    user="root",
-    password="root123",
-    database="ems_db",
-    unix_socket="/tmp/mysql.sock"
-)
-
 #--------role check-----------
 def role_required(allowed_roles):
     def decorator(func):
