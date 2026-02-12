@@ -32,7 +32,7 @@
     <td>{{ emp[3] }}</td>
     <td>{{ emp[4] }}</td>
     <td>
-<img src="/static/uploads/{{ emp[5] }}" width="60">
+  <td><img src="{{ url_for('static', filename='uploads/' + emp[5]) }}" width="50"></td>
 </td>
 
 
