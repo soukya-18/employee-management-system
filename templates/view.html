@@ -3,58 +3,65 @@
 <head>
     <title>Employees</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 </head>
 <body>
 
 <h2>Employee List</h2>
+
 <form method="POST" action="/search">
     <input type="text" name="keyword" placeholder="Search by name">
     <button type="submit">Search</button>
 </form>
+
 <br>
+
 <table border="1">
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Department</th>
-    <th>Salary</th>
-    <th>Photo</th>
-    <th>Action</th>
-</tr>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Photo</th>
+        <th>Action</th>
+    </tr>
 
-{% for emp in employees %}
-<tr>
-    <td>{{ emp[0] }}</td>
-    <td>{{ emp[1] }}</td>
-    <td>{{ emp[2] }}</td>
-    <td>{{ emp[3] }}</td>
-    <td>{{ emp[4] }}</td>
-    <td>
-  <td><img src="{{ url_for('static', filename='uploads/' + emp[5]) }}" width="50"></td>
-</td>
-
-
-
-    <td>
-        <a href="/edit/{{ emp[0] }}">Edit</a> |
-        <a href="/delete/{{ emp[0] }}">Delete</a>
-    </td>
-</tr>
-{% endfor %}
-
+    {% for emp in employees %}
+    <tr>
+        <td>{{ emp[0] }}</td>
+        <td>{{ emp[1] }}</td>
+        <td>{{ emp[2] }}</td>
+        <td>{{ emp[3] }}</td>
+        <td>{{ emp[4] }}</td>
+        <td>
+            {% if emp[5] %}
+                <img src="{{ url_for('static', filename='uploads/' + emp[5]) }}"
+                     width="50" height="50"
+                     style="border-radius:50%;">
+            {% else %}
+                No Photo
+            {% endif %}
+        </td>
+        <td>
+            <a href="/edit/{{ emp[0] }}">Edit</a> |
+            <a href="/delete/{{ emp[0] }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
 </table>
 
 <br>
-<a href="/">Add New Employee</a>
+
+<a href="/">Add New Employee</a> |
 <a href="/logout">Logout</a>
+
 <hr>
-<a href="/export">Download Excel</a>
-<a href="/dashboard">Dashboard</a> |
-<a href="/export">Download Excel</a>
-<br><br>
+
+<a href="/export">Download Excel</a> |
+<a href="/dashboard">Dashboard</a>
 
 <br><br>
+
 </body>
 </html>
+
