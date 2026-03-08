@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h2 class="mb-4 text-primary">Add Employee</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="mb-3">
+<label class="form-label">Name</label>
+<input type="text" name="name" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Email</label>
+<input type="email" name="email" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Department</label>
+
+<select name="department" class="form-select" required>
+<option value="">-- Select Department --</option>
+<option value="HR">HR</option>
+<option value="IT">IT</option>
+<option value="Sales">Sales</option>
+<option value="Finance">Finance</option>
+</select>
+
+</div>
+
+<div class="mb-3">
+<label class="form-label">Salary</label>
+<input type="number" name="salary" class="form-control" required>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Photo</label>
+<input type="file" name="photo" class="form-control">
+</div>
+
+<button type="submit" class="btn btn-success">Add Employee</button>
+
+<a href="{{ url_for('employees') }}" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

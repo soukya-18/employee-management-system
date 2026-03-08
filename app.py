@@ -180,34 +180,36 @@ def search_employee():
     return render_template("employees.html", employees=employees)
 
 # ---------------- ADD EMPLOYEE ----------------
-@app.route("/add_employee",methods=["POST"])
+@app.route("/add_employee", methods=["GET","POST"])
 @login_required
 @role_required(["Admin","HR"])
 def add_employee():
 
-    name = request.form["name"]
-    email = request.form["email"]
-    department = request.form["department"]
-    salary = request.form["salary"]
+    if request.method == "POST":
 
-    photo = request.files["photo"]
+        name = request.form["name"]
+        email = request.form["email"]
+        department = request.form["department"]
+        salary = request.form["salary"]
 
-    filename=None
-    if photo and photo.filename!="":
-        filename=secure_filename(photo.filename)
-        photo.save(os.path.join(app.config["UPLOAD_FOLDER"],filename))
+        photo = request.files["photo"]
 
-    cursor.execute("""
-    INSERT INTO employees(name,email,department,salary,photo)
-    VALUES(%s,%s,%s,%s,%s)
-    """,(name,email,department,salary,filename))
+        filename = None
+        if photo and photo.filename != "":
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
-    db.commit()
+        cursor.execute("""
+        INSERT INTO employees(name,email,department,salary,photo)
+        VALUES(%s,%s,%s,%s,%s)
+        """,(name,email,department,salary,filename))
 
-    flash("Employee added successfully","success")
-    return redirect("/employees")
+        db.commit()
 
+        flash("Employee added successfully","success")
+        return redirect("/employees")
 
+    return render_template("add_employee.html")
 # ---------------- EDIT EMPLOYEE ----------------
 @app.route("/edit_employee/<int:id>",methods=["GET","POST"])
 @login_required

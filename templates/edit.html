@@ -15,8 +15,15 @@
 <input class="form-control mb-2" name="email" value="{{emp.email}}">
 
 <label>Department</label>
-<input class="form-control mb-2" name="department" value="{{emp.department}}">
+<select name="department" class="form-select mb-2" required>
+<option value="">-- Select Department --</option>
 
+<option value="HR" {% if emp.department == "HR" %}selected{% endif %}>HR</option>
+<option value="IT" {% if emp.department == "IT" %}selected{% endif %}>IT</option>
+<option value="Sales" {% if emp.department == "Sales" %}selected{% endif %}>Sales</option>
+<option value="Finance" {% if emp.department == "Finance" %}selected{% endif %}>Finance</option>
+
+</select>
 <label>Salary</label>
 <input class="form-control mb-2" name="salary" value="{{emp.salary}}">
 
