@@ -1,10 +1,63 @@
-<h2>Employee Dashboard</h2>
+{% extends "layout.html" %}
 
-<p>Total Employees: {{ total }}</p>
-<p>Average Salary: {{ avg }}</p>
-<p>Highest Salary: {{ max }}</p>
-<p>Lowest Salary: {{ min }}</p>
+{% block content %}
 
-<a href="/view">Back</a>
-<h3>Salary Chart</h3>
-<img src="/salary_chart">
+<h2>Dashboard</h2>
+
+<div class="row mt-4">
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Total Employees</h6>
+<h3>{{total}}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Average Salary</h6>
+<h3>{{avg}}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Max Salary</h6>
+<h3>{{max}}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 shadow-sm">
+<h6>Min Salary</h6>
+<h3>{{min}}</h3>
+</div>
+</div>
+
+</div>
+
+<h4 class="mt-5">Recent Employees</h4>
+
+<table class="table mt-3">
+
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Department</th>
+</tr>
+
+{% for r in recent %}
+
+<tr>
+
+<td>{{r.name}}</td>
+<td>{{r.email}}</td>
+<td>{{r.department}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

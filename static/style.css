@@ -1,36 +1,142 @@
+/* ---------------- GLOBAL ---------------- */
+
 body {
-    font-family: Arial;
+    font-family: 'Segoe UI', Arial, sans-serif;
     background-color: #f2f2f2;
 }
 
-h2 {
-    text-align: center;
+/* Headings */
+h1, h2, h3, h4 {
+    font-weight: 600;
+    color: #333;
 }
 
-form, table {
+/* Links */
+a {
+    text-decoration: none;
+}
+
+/* ---------------- CARDS ---------------- */
+
+.custom-card {
     background: white;
-    width: 50%;
-    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 20px;
+}
+
+/* Smooth hover */
+.card:hover {
+    transform: translateY(-2px);
+    transition: 0.2s ease;
+}
+
+/* ---------------- TABLE ---------------- */
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+/* Table hover animation */
+.table-hover tbody tr:hover {
+    transform: scale(1.01);
+    transition: 0.15s ease-in-out;
+}
+
+/* ---------------- IMAGES ---------------- */
+
+img.rounded-circle {
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+
+/* ---------------- FORMS ---------------- */
+
+.form-control {
     border-radius: 8px;
 }
 
-input, button {
-    padding: 8px;
-    width: 95%;
+.form-control:focus {
+    box-shadow: none;
+    border-color: #86b7fe;
 }
 
-button {
-    background: #4CAF50;
-    color: white;
-    border: none;
+/* ---------------- BUTTONS ---------------- */
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
 }
 
-table {
-    border-collapse: collapse;
+/* Soft button hover */
+.btn:hover {
+    transform: translateY(-1px);
+    transition: 0.15s ease-in-out;
 }
 
-th, td {
-    padding: 10px;
+/* ---------------- ALERTS ---------------- */
+
+.alert {
+    border-radius: 10px;
+}
+
+/* ---------------- DASHBOARD STATS ---------------- */
+
+.stat-card {
+    border-radius: 14px;
     text-align: center;
+    padding: 15px;
+}
+
+.stat-card h5 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ---------------- PROFILE PAGE ---------------- */
+
+.profile-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.profile-table th {
+    background-color: #f8f9fa;
+    width: 30%;
+}
+
+/* ---------------- SPACING HELPERS ---------------- */
+
+.section-spacing {
+    margin-top: 30px;
+}
+
+/* ---------------- OPTIONAL DARK MODE READY ---------------- */
+
+.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.dark-mode .card,
+.dark-mode .custom-card {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+.dark-mode .table {
+    color: white;
+}
+
+.dark-mode .form-control {
+    background-color: #2a2a2a;
+    color: white;
+    border-color: #444;
 }

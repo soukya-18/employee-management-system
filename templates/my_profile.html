@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block content %}
 
 <h2>My Profile</h2>
 
-{% if emp %}
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Name</th>
-        <td>{{ emp[1] }}</td>
-    </tr>
-    <tr>
-        <th>Email</th>
-        <td>{{ emp[2] }}</td>
-    </tr>
-    <tr>
-        <th>Department</th>
-        <td>{{ emp[3] }}</td>
-    </tr>
-    <tr>
-        <th>Salary</th>
-        <td>{{ emp[4] }}</td>
-    </tr>
-</table>
-{% else %}
-<p>No profile found.</p>
+<div class="card p-4 shadow" style="max-width:500px">
+
+<p><b>Name:</b> {{emp.name}}</p>
+
+<p><b>Email:</b> {{emp.email}}</p>
+
+<p><b>Department:</b> {{emp.department}}</p>
+
+<p><b>Salary:</b> {{emp.salary}}</p>
+
+{% if emp.photo %}
+
+<img src="/static/uploads/{{emp.photo}}" width="120">
+
 {% endif %}
 
-<br>
-<a href="/dashboard">Back to Dashboard</a>
+</div>
 
-</body>
-</html>
+{% endblock %}
