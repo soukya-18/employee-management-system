@@ -1,7 +1,7 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import matplotlib
 matplotlib.use("Agg")
@@ -59,21 +59,21 @@ def role_required(roles):
 
 # ---------------- HOME ----------------
 @app.route("/")
+@login_required
 def home():
-
-    if "user_id" not in session:
-        return redirect("/login")
 
     role = session.get("role")
 
     if role in ["Admin","HR"]:
         return redirect("/dashboard")
 
-    elif role == "Manager":
+    if role == "Manager":
         return redirect("/employees")
 
-    else:
+    if role == "Employee":
         return redirect("/my_profile")
+
+    return redirect("/login")
 
 
 # ---------------- LOGIN ----------------
@@ -160,8 +160,9 @@ def employees():
 
     return render_template("employees.html",employees=employees)
 
-
 @app.route('/search_employee', methods=['POST'])
+@login_required
+@role_required(["Admin","HR","Manager"])
 def search_employee():
     keyword = request.form.get("keyword")
 
@@ -191,22 +192,37 @@ def add_employee():
         email = request.form["email"]
         department = request.form["department"]
         salary = request.form["salary"]
+        role_id = request.form["role"]   # <-- NEW
+
+        username = email
+
+        default_password = "emp123"
+
+        hashed_password = generate_password_hash(default_password)
+
+        cursor.execute("""
+        INSERT INTO users (username,password,role_id)
+        VALUES (%s,%s,%s)
+        """,(username,hashed_password,role_id))
+
+        user_id = cursor.lastrowid
 
         photo = request.files["photo"]
-
         filename = None
+
         if photo and photo.filename != "":
             filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
+        # insert employee
         cursor.execute("""
-        INSERT INTO employees(name,email,department,salary,photo)
-        VALUES(%s,%s,%s,%s,%s)
-        """,(name,email,department,salary,filename))
+        INSERT INTO employees(name,email,department,salary,photo,user_id)
+        VALUES(%s,%s,%s,%s,%s,%s)
+        """,(name,email,department,salary,filename,user_id))
 
         db.commit()
+        flash(f"Employee added successfully. Username: {email} | Password: emp123","success")
 
-        flash("Employee added successfully","success")
         return redirect("/employees")
 
     return render_template("add_employee.html")
@@ -216,7 +232,12 @@ def add_employee():
 @role_required(["Admin","HR"])
 def edit_employee(id):
 
-    cursor.execute("SELECT * FROM employees WHERE id=%s",(id,))
+    cursor.execute("""
+    SELECT e.*, u.role_id 
+    FROM employees e
+    JOIN users u ON e.user_id = u.id
+    WHERE e.id=%s
+    """,(id,))
     emp = cursor.fetchone()
 
     if request.method=="POST":
@@ -225,6 +246,7 @@ def edit_employee(id):
         email=request.form["email"]
         department=request.form["department"]
         salary=request.form["salary"]
+        role_id=request.form["role"]   # NEW
 
         photo=request.files["photo"]
         filename=emp["photo"]
@@ -233,19 +255,26 @@ def edit_employee(id):
             filename=secure_filename(photo.filename)
             photo.save(os.path.join(app.config["UPLOAD_FOLDER"],filename))
 
+        # update employee table
         cursor.execute("""
         UPDATE employees
         SET name=%s,email=%s,department=%s,salary=%s,photo=%s
         WHERE id=%s
         """,(name,email,department,salary,filename,id))
 
+        # update role in users table
+        cursor.execute("""
+        UPDATE users
+        SET role_id=%s
+        WHERE id=%s
+        """,(role_id,emp["user_id"]))
+
         db.commit()
 
-        flash("Employee updated","success")
+        flash("Employee updated successfully","success")
         return redirect("/employees")
 
     return render_template("edit.html",emp=emp)
-
 
 # ---------------- DELETE ----------------
 @app.route("/delete_employee/<int:id>")
@@ -253,11 +282,16 @@ def edit_employee(id):
 @role_required(["Admin","HR"])
 def delete_employee(id):
 
-    cursor.execute("DELETE FROM employees WHERE id=%s",(id,))
-    db.commit()
+    cursor.execute("SELECT user_id FROM employees WHERE id=%s",(id,))
+    emp = cursor.fetchone()
 
+    cursor.execute("DELETE FROM employees WHERE id=%s",(id,))
+    cursor.execute("DELETE FROM users WHERE id=%s",(emp["user_id"],))
+
+    db.commit()
     flash("Employee deleted","danger")
     return redirect("/employees")
+
 
 
 # ---------------- PROFILE ----------------
@@ -265,12 +299,51 @@ def delete_employee(id):
 @login_required
 def my_profile():
 
-    emp_id=session.get("employee_id")
+    user_id = session.get("user_id")
 
-    cursor.execute("SELECT * FROM employees WHERE id=%s",(emp_id,))
-    emp=cursor.fetchone()
+    cursor.execute("""
+    SELECT e.*, r.role_name
+    FROM users u
+    LEFT JOIN employees e ON u.id = e.user_id
+    LEFT JOIN roles r ON u.role_id = r.id
+    WHERE u.id=%s
+    """,(user_id,))
 
-    return render_template("my_profile.html",emp=emp)
+    emp = cursor.fetchone()
+
+    return render_template("my_profile.html", emp=emp)
+
+@app.route("/change_password", methods=["GET","POST"])
+@login_required
+def change_password():
+
+    if request.method == "POST":
+
+        current_password = request.form["current_password"]
+        new_password = request.form["new_password"]
+
+        user_id = session["user_id"]
+
+        cursor.execute("SELECT password FROM users WHERE id=%s",(user_id,))
+        user = cursor.fetchone()
+
+        if not check_password_hash(user["password"], current_password):
+            flash("Current password is incorrect","danger")
+            return redirect("/change_password")
+
+        new_hash = generate_password_hash(new_password)
+
+        cursor.execute(
+            "UPDATE users SET password=%s WHERE id=%s",
+            (new_hash,user_id)
+        )
+
+        db.commit()
+
+        flash("Password changed successfully","success")
+        return redirect("/")
+
+    return render_template("change_password.html")
 
 
 # ---------------- EXPORT EXCEL ----------------

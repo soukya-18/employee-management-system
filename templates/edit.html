@@ -14,14 +14,26 @@
 <label>Email</label>
 <input class="form-control mb-2" name="email" value="{{emp.email}}">
 
-<label>Department</label>
-<select name="department" class="form-select mb-2" required>
-<option value="">-- Select Department --</option>
 
-<option value="HR" {% if emp.department == "HR" %}selected{% endif %}>HR</option>
-<option value="IT" {% if emp.department == "IT" %}selected{% endif %}>IT</option>
-<option value="Sales" {% if emp.department == "Sales" %}selected{% endif %}>Sales</option>
-<option value="Finance" {% if emp.department == "Finance" %}selected{% endif %}>Finance</option>
+<label>Department</label>
+<select name="department" class="form-select" required>
+<option value="IT" {% if emp.department=='IT' %}selected{% endif %}>IT</option>
+<option value="Sales" {% if emp.department=='Sales' %}selected{% endif %}>Sales</option>
+<option value="Finance" {% if emp.department=='Finance' %}selected{% endif %}>Finance</option>
+<option value="HR" {% if emp.department=='HR' %}selected{% endif %}>HR</option>
+</select>
+
+
+<label class="mt-2">Role</label>
+<select name="role" class="form-select" required>
+
+<option value="4" {% if emp.role_id==4 %}selected{% endif %}>Employee</option>
+
+<option value="3" {% if emp.role_id==3 %}selected{% endif %}>Manager</option>
+
+<option value="2" {% if emp.role_id==2 %}selected{% endif %}>HR</option>
+
+</select>
 
 </select>
 <label>Salary</label>

@@ -16,9 +16,14 @@
 
 {% if emp.photo %}
 
-<img src="/static/uploads/{{emp.photo}}" width="120">
+<img src="/static/uploads/{{emp.photo}}" width="120" class="rounded-circle">
 
 {% endif %}
+<br><br>
+
+<a href="{{ url_for('change_password') }}" class="btn btn-warning">
+Change Password
+</a>
 
 </div>
 
